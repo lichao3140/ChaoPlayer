@@ -3,6 +3,7 @@ package com.lichao.chaoplayer;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
@@ -12,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_REQUEST_CODE = 10000;
 
-    // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
     }
@@ -27,11 +29,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //去掉标题栏
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        //全屏，隐藏状态
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN , WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //屏幕为横屏
+        setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
         setContentView(R.layout.activity_main);
 
         TextView tv = (TextView) findViewById(R.id.sample_text);
         //Open("/sdcard/Movies/1.mp4", this);
-        tv.setText(stringFromJNI());
+        //tv.setText(stringFromJNI());
 
         /**
          *
@@ -147,5 +155,4 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
-    public native boolean Open(String url, Object handle);
 }
