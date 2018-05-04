@@ -38,7 +38,14 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/native-lib.cpp )
+             src/main/cpp/native-lib.cpp
+              src/main/cpp/ChaoDemux.cpp
+              src/main/cpp/FFDemux.cpp
+              src/main/cpp/ChaoData.cpp
+              src/main/cpp/ChaoLog.cpp
+              src/main/cpp/ChaoThread.cpp
+              src/main/cpp/ChaoObserver.cpp
+              )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by

@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.sample_text);
         //Open("/sdcard/Movies/1.mp4", this);
         //tv.setText(stringFromJNI());
+        tv.setText(TestJNI());
 
         /**
          *
@@ -155,4 +156,5 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+    public native String TestJNI();
 }

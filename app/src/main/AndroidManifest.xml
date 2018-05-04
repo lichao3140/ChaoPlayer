@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lichao.chaoplayer">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- 声明所有需要的权限（包括普通权限和危险权限） -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>

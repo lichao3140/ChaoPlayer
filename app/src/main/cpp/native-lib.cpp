@@ -7,6 +7,8 @@
 #include <SLES/OpenSLES_Android.h>
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
+#include "FFDemux.h"
+#include "ChaoLog.h"
 
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "ChaoPlayer", __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "ChaoPlayer", __VA_ARGS__)
@@ -133,6 +135,13 @@ GLint InitShader(const char *code, GLint type) {
     LOGD("glCompileShader success!");
     return sh;
 }
+
+class TestObs:public ChaoObserver {
+public:
+    void Update(ChaoData d) {
+        CHAOLOGI("TestObs Update data size is %d", d.size);
+    }
+};
 
 extern "C"
 JNIEXPORT
@@ -670,4 +679,26 @@ Java_com_lichao_chaoplayer_ChaoPlay_Yuv(JNIEnv *env, jobject instance, jstring u
     }
 
     env->ReleaseStringUTFChars(url_, url);
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_lichao_chaoplayer_MainActivity_TestJNI(JNIEnv *env, jobject instance) {
+
+    std::string hello = "Hello from C++";
+
+    TestObs *tobs = new TestObs();
+    ChaoDemux *de = new FFDemux();
+    de->AddObs(tobs);
+    de->Open("/sdcard/Movies/1080.mp4");
+    de->Start();
+    ChaoSleep(3000);
+    de->Stop();
+
+    /*for (;;) {
+        ChaoData d = de->Read();
+        //CHAOLOGI("Read data size is %d", d.size);
+    }*/
+
+    return env->NewStringUTF(hello.c_str());
 }
