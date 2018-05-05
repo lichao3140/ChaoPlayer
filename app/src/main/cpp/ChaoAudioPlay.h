@@ -20,6 +20,7 @@ public:
     //最大缓冲
     int maxFrame = 100;
 
+    int pts = 0;
 protected:
     std::list <ChaoData> frames;
     //  互斥变量

@@ -6,6 +6,7 @@
 #define CHAOPLAYER_CHAOPLAYER_H
 
 
+#include <mutex>
 #include "ChaoThread.h"
 #include "ChaoParameter.h"
 
@@ -40,6 +41,9 @@ public:
     ChaoAudioPlay *audioPlay = 0;
 
 protected:
+    //用作音视频同步
+    void Main();
+    std::mutex mux;
     ChaoPlayer(){};
 };
 

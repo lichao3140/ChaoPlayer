@@ -6,12 +6,15 @@
 #define CHAOPLAYER_FFDEMUX_H
 
 #include "ChaoDemux.h"
+#include <mutex>
 struct AVFormatContext;
 
 class FFDemux: public ChaoDemux {
 public:
     //打开文件，或者流媒体 rmtp http rtsp
     virtual bool Open(const char *url);
+
+    virtual void Close();
 
     //获取视频参数
     virtual ChaoParameter GetVPara();
@@ -26,6 +29,7 @@ public:
 
 private:
     AVFormatContext *ic = 0;
+    std::mutex mux;
     int audioStream = 1;
     int videoStream = 0;
 };

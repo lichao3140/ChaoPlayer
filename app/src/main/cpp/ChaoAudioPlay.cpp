@@ -11,14 +11,17 @@ ChaoData ChaoAudioPlay::GetData() {
     while(!isExit) {
         framesMutex.lock();
         if(!frames.empty()) {
+            //有数据返回
             d = frames.front();
             frames.pop_front();
             framesMutex.unlock();
+            pts = d.pts;
             return d;
         }
         framesMutex.unlock();
         ChaoSleep(1);
     }
+    //未获取数据
     return d;
 }
 

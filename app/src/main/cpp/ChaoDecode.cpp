@@ -27,6 +27,15 @@ void ChaoDecode::Update(ChaoData pkt) {
 void ChaoDecode::Main() {
     while(!isExit) {
         packsMutex.lock();
+        //判断音视频同步
+        if(!isAudio && synPts > 0) {
+            if(synPts < pts) {
+                packsMutex.unlock();
+                ChaoSleep(1);
+                continue;
+            }
+        }
+
         if(packs.empty()) {
             packsMutex.unlock();
             ChaoSleep(1);
@@ -43,7 +52,7 @@ void ChaoDecode::Main() {
                 ChaoData frame = RecvFrame();
                 if(!frame.data) break;
                 //CHAOLOGE("RecvFrame %d", frame.size);
-
+                pts = frame.pts;
                 //发送数据给观察者
                 this->Notify(frame);
             }

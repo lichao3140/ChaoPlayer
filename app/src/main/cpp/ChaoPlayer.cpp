@@ -15,9 +15,30 @@ ChaoPlayer *ChaoPlayer::Get(unsigned char index) {
     return &p[index];
 }
 
+void ChaoPlayer::Main() {
+    while (!isExit) {
+        mux.lock();
+        if(!audioPlay|| !vdecode) {
+            mux.unlock();
+            ChaoSleep(2);
+            continue;
+        }
+        //同步
+        //获取音频的pts 告诉视频
+        int apts = audioPlay->pts;
+        //CHAOLOGE("apts = %d", apts);
+        vdecode->synPts = apts;
+
+        mux.unlock();
+        ChaoSleep(2);
+    }
+}
+
 bool ChaoPlayer::Open(const char *path) {
+    mux.lock();
     //解封装
     if(!demux || !demux->Open(path)) {
+        mux.unlock();
         CHAOLOGE("demux->Open %s failed!", path);
         return false;
     }
@@ -34,11 +55,14 @@ bool ChaoPlayer::Open(const char *path) {
     if(!resample || !resample->Open(demux->GetAPara(), outPara)) {
         CHAOLOGE("resample->Open %s failed!", path);
     }
+    mux.unlock();
     return true;
 }
 
 bool ChaoPlayer::Start() {
+    mux.lock();
     if(!demux || !demux->Start()) {
+        mux.unlock();
         CHAOLOGE("demux->Start failed!");
         return false;
     }
@@ -48,6 +72,8 @@ bool ChaoPlayer::Start() {
         audioPlay->StartPlay(outPara);
     if(vdecode)
         vdecode->Start();
+    ChaoThread::Start();
+    mux.unlock();
     return true;
 }
 

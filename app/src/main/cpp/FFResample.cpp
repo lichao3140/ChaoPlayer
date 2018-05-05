@@ -53,6 +53,7 @@ ChaoData FFResample::Resample(ChaoData indata) {
         out.Drop();
         return ChaoData();
     }
+    out.pts = indata.pts;
     //CHAOLOGE("swr_convert success = %d", len);
     return out;
 }
