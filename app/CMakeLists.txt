@@ -45,6 +45,9 @@ add_library( # Sets the name of the library.
               src/main/cpp/ChaoLog.cpp
               src/main/cpp/ChaoThread.cpp
               src/main/cpp/ChaoObserver.cpp
+              src/main/cpp/FFDecode.cpp
+              src/main/cpp/ChaoDecode.cpp
+              src/main/cpp/ChaoParameter.cpp
               )
 
 # Searches for a specified prebuilt library and stores the path as a

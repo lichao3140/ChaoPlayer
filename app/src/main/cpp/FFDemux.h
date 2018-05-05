@@ -13,6 +13,12 @@ public:
     //打开文件，或者流媒体 rmtp http rtsp
     virtual bool Open(const char *url);
 
+    //获取视频参数
+    virtual ChaoParameter GetVPara();
+
+    //获取音频参数
+    virtual ChaoParameter GetAPara();
+
     //读取一帧数据，数据由调用者清理
     virtual ChaoData Read();
 

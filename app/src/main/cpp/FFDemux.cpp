@@ -31,8 +31,46 @@ bool FFDemux::Open(const char *url) {
     }
     this->totalMs = ic->duration / (AV_TIME_BASE / 1000);
     CHAOLOGI("total = %d ms!", totalMs);
-
+    GetVPara();
+    GetAPara();
     return true;
+}
+
+//获取视频参数
+ChaoParameter FFDemux::GetVPara() {
+    if (!ic) {
+        CHAOLOGE("GetVPara failed! ic is NULL！");
+        return ChaoParameter();
+    }
+    //获取了视频流索引
+    int re = av_find_best_stream(ic, AVMEDIA_TYPE_VIDEO, -1, -1, 0, 0);
+    if (re < 0) {
+        CHAOLOGE("av_find_best_stream failed!");
+        return ChaoParameter();
+    }
+    videoStream = re;
+    ChaoParameter para;
+    para.para = ic->streams[re]->codecpar;
+
+    return para;
+}
+
+//获取音频参数
+ChaoParameter FFDemux::GetAPara() {
+    if (!ic) {
+        CHAOLOGE("GetVPara failed! ic is NULL！");
+        return ChaoParameter();
+    }
+    //获取了音频流索引
+    int re = av_find_best_stream(ic, AVMEDIA_TYPE_AUDIO, -1, -1, 0, 0);
+    if (re < 0) {
+        CHAOLOGE("av_find_best_stream failed!");
+        return ChaoParameter();
+    }
+    audioStream = re;
+    ChaoParameter para;
+    para.para = ic->streams[re]->codecpar;
+    return para;
 }
 
 //读取一帧数据，数据由调用者清理

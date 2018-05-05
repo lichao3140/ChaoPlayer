@@ -9,6 +9,8 @@
 #include <GLES2/gl2.h>
 #include "FFDemux.h"
 #include "ChaoLog.h"
+#include "ChaoDecode.h"
+#include "FFDecode.h"
 
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "ChaoPlayer", __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "ChaoPlayer", __VA_ARGS__)
@@ -139,7 +141,7 @@ GLint InitShader(const char *code, GLint type) {
 class TestObs:public ChaoObserver {
 public:
     void Update(ChaoData d) {
-        CHAOLOGI("TestObs Update data size is %d", d.size);
+        //CHAOLOGI("TestObs Update data size is %d", d.size);
     }
 };
 
@@ -689,11 +691,23 @@ Java_com_lichao_chaoplayer_MainActivity_TestJNI(JNIEnv *env, jobject instance) {
 
     TestObs *tobs = new TestObs();
     ChaoDemux *de = new FFDemux();
-    de->AddObs(tobs);
+//    de->AddObs(tobs);
     de->Open("/sdcard/Movies/1080.mp4");
+
+    ChaoDecode *vdecode = new FFDecode();
+    vdecode->Open(de->GetVPara());
+
+    ChaoDecode *adecode = new FFDecode();
+    adecode->Open(de->GetAPara());
+
+    de->AddObs(vdecode);
+    de->AddObs(adecode);
+
     de->Start();
-    ChaoSleep(3000);
-    de->Stop();
+    vdecode->Start();
+    adecode->Start();
+//    ChaoSleep(3000);
+//    de->Stop();
 
     /*for (;;) {
         ChaoData d = de->Read();
