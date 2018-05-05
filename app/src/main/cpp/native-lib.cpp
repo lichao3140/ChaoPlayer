@@ -15,6 +15,10 @@
 #include "ChaoEGL.h"
 #include "ChaoShader.h"
 #include "GLVideoView.h"
+#include "ChaoResample.h"
+#include "FFResample.h"
+#include "ChaoAudioPlay.h"
+#include "SLAudioPlay.h"
 
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "ChaoPlayer", __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "ChaoPlayer", __VA_ARGS__)
@@ -711,6 +715,17 @@ Java_com_lichao_chaoplayer_MainActivity_TestJNI(JNIEnv *env, jobject instance) {
 
     view = new GLVideoView();
     vdecode->AddObs(view);
+
+    ChaoResample *resample = new FFResample();
+    ChaoParameter outPara = de->GetAPara();
+
+    resample->Open(de->GetAPara(),outPara);
+    adecode->AddObs(resample);
+
+    ChaoAudioPlay *audioPlay = new SLAudioPlay();
+    audioPlay->StartPlay(outPara);
+    resample->AddObs(audioPlay);
+
 
     de->Start();
     vdecode->Start();

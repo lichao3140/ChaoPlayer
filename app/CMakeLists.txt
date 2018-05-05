@@ -53,6 +53,10 @@ add_library( # Sets the name of the library.
               src/main/cpp/ChaoTexture.cpp
               src/main/cpp/ChaoEGL.cpp
               src/main/cpp/ChaoShader.cpp
+              src/main/cpp/FFResample.cpp
+              src/main/cpp/ChaoResample.cpp
+              src/main/cpp/SLAudioPlay.cpp
+              src/main/cpp/ChaoAudioPlay.cpp
               )
 
 # Searches for a specified prebuilt library and stores the path as a
