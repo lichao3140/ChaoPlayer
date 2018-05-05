@@ -6,6 +6,7 @@
 extern "C"{
     #include <libavformat/avformat.h>
 }
+
 void ChaoData::Drop() {
     if(!data) return;
     av_packet_free((AVPacket **)&data);// 空间释放

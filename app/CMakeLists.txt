@@ -48,6 +48,11 @@ add_library( # Sets the name of the library.
               src/main/cpp/FFDecode.cpp
               src/main/cpp/ChaoDecode.cpp
               src/main/cpp/ChaoParameter.cpp
+              src/main/cpp/ChaoVideoView.cpp
+              src/main/cpp/GLVideoView.cpp
+              src/main/cpp/ChaoTexture.cpp
+              src/main/cpp/ChaoEGL.cpp
+              src/main/cpp/ChaoShader.cpp
               )
 
 # Searches for a specified prebuilt library and stores the path as a

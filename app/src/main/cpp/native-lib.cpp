@@ -11,6 +11,10 @@
 #include "ChaoLog.h"
 #include "ChaoDecode.h"
 #include "FFDecode.h"
+#include "ChaoVideoView.h"
+#include "ChaoEGL.h"
+#include "ChaoShader.h"
+#include "GLVideoView.h"
 
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "ChaoPlayer", __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "ChaoPlayer", __VA_ARGS__)
@@ -144,6 +148,8 @@ public:
         //CHAOLOGI("TestObs Update data size is %d", d.size);
     }
 };
+
+ChaoVideoView *view = NULL;
 
 extern "C"
 JNIEXPORT
@@ -703,6 +709,9 @@ Java_com_lichao_chaoplayer_MainActivity_TestJNI(JNIEnv *env, jobject instance) {
     de->AddObs(vdecode);
     de->AddObs(adecode);
 
+    view = new GLVideoView();
+    vdecode->AddObs(view);
+
     de->Start();
     vdecode->Start();
     adecode->Start();
@@ -715,4 +724,14 @@ Java_com_lichao_chaoplayer_MainActivity_TestJNI(JNIEnv *env, jobject instance) {
     }*/
 
     return env->NewStringUTF(hello.c_str());
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_lichao_chaoplayer_ChaoPlay_InitView(JNIEnv *env, jobject instance, jobject surface) {
+    ANativeWindow *win = ANativeWindow_fromSurface(env,surface);
+    view->SetRender(win);
+//    ChaoEGL::Get()->Init(win);
+//    ChaoShader shader;
+//    shader.Init();
 }

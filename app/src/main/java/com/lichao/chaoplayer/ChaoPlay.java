@@ -14,12 +14,14 @@ public class ChaoPlay extends GLSurfaceView implements Runnable, SurfaceHolder.C
     @Override
     public void run() {
         //Open("/sdcard/Movies/1080.mp4", getHolder().getSurface());
-        Yuv("/sdcard/Movies/out.yuv", getHolder().getSurface());
+        //Yuv("/sdcard/Movies/out.yuv", getHolder().getSurface());
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-       new Thread(this).start();
+        //new Thread(this).start();
+        //初始化opengl egl 显示
+        InitView(holder.getSurface());
     }
 
     @Override
@@ -34,4 +36,5 @@ public class ChaoPlay extends GLSurfaceView implements Runnable, SurfaceHolder.C
 
     public native void Open(String url, Object surface);
     public native void Yuv(String url, Object surface);
+    public native void InitView(Object surface);
 }
