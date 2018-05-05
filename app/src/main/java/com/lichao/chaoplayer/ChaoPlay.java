@@ -4,7 +4,6 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -16,13 +15,11 @@ public class ChaoPlay extends GLSurfaceView implements Runnable, SurfaceHolder.C
 
     @Override
     public void run() {
-        //Open("/sdcard/Movies/1080.mp4", getHolder().getSurface());
-        //Yuv("/sdcard/Movies/out.yuv", getHolder().getSurface());
+
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        //new Thread(this).start();
         //初始化opengl egl 显示
         InitView(holder.getSurface());
         //android 8.0 需要设置
@@ -56,7 +53,6 @@ public class ChaoPlay extends GLSurfaceView implements Runnable, SurfaceHolder.C
 
     }
 
-    public native void Open(String url, Object surface);
-    public native void Yuv(String url, Object surface);
     public native void InitView(Object surface);
+
 }

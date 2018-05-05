@@ -38,12 +38,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView tv = (TextView) findViewById(R.id.sample_text);
-        //Open("/sdcard/Movies/1.mp4", this);
         //tv.setText(stringFromJNI());
-        tv.setText(TestJNI());
 
         /**
-         *
          * 需要3个权限(都是危险权限):
          *      1. 读取通讯录权限;
          *      2. 读取外部存储器权限;
@@ -149,12 +146,4 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("取消", null);
         builder.show();
     }
-
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
-    public native String TestJNI();
 }

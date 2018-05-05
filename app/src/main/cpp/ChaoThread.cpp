@@ -14,10 +14,11 @@ void ChaoSleep(int mis) {
 }
 
 //启动线程
-void ChaoThread::Start() {
+bool ChaoThread::Start() {
     isExit = false;
     thread th(&ChaoThread::ThreadMain, this);
     th.detach();
+    return true;
 }
 
 //通过控制isExit安全停止线程（不一定成功）
