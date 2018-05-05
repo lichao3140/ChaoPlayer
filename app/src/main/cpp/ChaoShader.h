@@ -5,14 +5,19 @@
 #ifndef CHAOPLAYER_CHAOSHADER_H
 #define CHAOPLAYER_CHAOSHADER_H
 
+enum ChaoShaderType {
+    XSHADER_YUV420P = 0,    //软解码和虚拟机
+    XSHADER_NV12 = 25,      //手机
+    XSHADER_NV21 = 26
+};
 
 class ChaoShader {
 public:
     // 初始化
-    virtual bool Init();
+    virtual bool Init(ChaoShaderType type = XSHADER_YUV420P);
 
     // 获取材质并映射到内存
-    virtual void GetTexture(unsigned int index,int width,int height, unsigned char *buf);
+    virtual void GetTexture(unsigned int index,int width,int height, unsigned char *buf, bool isa = false);
 
     // 绘制
     virtual void Draw();

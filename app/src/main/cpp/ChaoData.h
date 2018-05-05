@@ -18,6 +18,7 @@ struct ChaoData {
     bool isAudio = false;
     int width = 0;
     int height = 0;
+    int format = 0; // 视频格式 用来区分使用 软解码或者硬解码
     bool Alloc(int size, const char *data = 0);
     void Drop();
 };

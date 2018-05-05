@@ -13,8 +13,10 @@ struct AVFrame;
 
 class FFDecode:public ChaoDecode {
 public:
+    //注册硬解码
+    static void InitHard(void *vm);
     //打开解码器
-    virtual bool Open(ChaoParameter para);
+    virtual bool Open(ChaoParameter para, bool isHard = false);
 
     //future模型 发送数据到线程解码
     virtual bool SendPacket(ChaoData pkt);

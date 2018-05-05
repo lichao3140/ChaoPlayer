@@ -4,21 +4,32 @@
 
 extern "C" {
     #include <libavcodec/avcodec.h>
+    #include <libavcodec/jni.h>
 }
 
 #include "FFDecode.h"
 #include "ChaoLog.h"
 
+// 硬解码初始化
+void FFDecode::InitHard(void *vm) {
+    av_jni_set_java_vm(vm,0);
+}
+
 //打开解码器
-bool FFDecode::Open(ChaoParameter para) {
+bool FFDecode::Open(ChaoParameter para, bool isHard) {
     if(!para.para) return false;
     AVCodecParameters *p = para.para;
     //1 查找解码器
     AVCodec *cd = avcodec_find_decoder(p->codec_id);
-    if(!cd) {
-        CHAOLOGE("avcodec_find_decoder %d failed!", p->codec_id);
+    if(isHard) {
+        // 打开硬解码
+        cd = avcodec_find_decoder_by_name("h264_mediacodec");
     }
-    CHAOLOGI("avcodec_find_decoder success!");
+    if(!cd) {
+        CHAOLOGE("avcodec_find_decoder %d failed!  %d", p->codec_id, isHard);
+        return false;
+    }
+    CHAOLOGI("avcodec_find_decoder success %d!", isHard);
     //2 创建解码上下文，并复制参数
     codec = avcodec_alloc_context3(cd);
     avcodec_parameters_to_context(codec, p);
@@ -80,6 +91,9 @@ ChaoData FFDecode::RecvFrame() {
         //音频：样本字节数 * 单通道样本数 * 通道数
         d.size = av_get_bytes_per_sample((AVSampleFormat)frame->format) * frame->nb_samples * 2;
     }
+    d.format = frame->format;
+//    if(!isAudio)
+//        CHAOLOGE("data format is %d", frame->format);
     memcpy(d.datas, frame->data, sizeof(d.datas));
     return d;
 }

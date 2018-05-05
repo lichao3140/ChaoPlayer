@@ -158,8 +158,37 @@ ChaoVideoView *view = NULL;
 extern "C"
 JNIEXPORT
 jint JNI_OnLoad(JavaVM *vm, void *res) {
-    // 调用java 实现硬解码
-    av_jni_set_java_vm(vm, 0);
+    FFDecode::InitHard(vm);
+
+    TestObs *tobs = new TestObs();
+    ChaoDemux *de = new FFDemux();
+    de->Open("/sdcard/Movies/1080.mp4");
+
+    ChaoDecode *vdecode = new FFDecode();
+    vdecode->Open(de->GetVPara(), true);
+
+    ChaoDecode *adecode = new FFDecode();
+    adecode->Open(de->GetAPara());
+    de->AddObs(vdecode);
+    de->AddObs(adecode);
+
+    view = new GLVideoView();
+    vdecode->AddObs(view);
+
+    ChaoResample *resample = new FFResample();
+    ChaoParameter outPara = de->GetAPara();
+
+    resample->Open(de->GetAPara(), outPara);
+    adecode->AddObs(resample);
+
+    ChaoAudioPlay *audioPlay = new SLAudioPlay();
+    audioPlay->StartPlay(outPara);
+    resample->AddObs(audioPlay);
+
+    de->Start();
+    vdecode->Start();
+    adecode->Start();
+
     return JNI_VERSION_1_4;
 }
 
@@ -696,47 +725,7 @@ Java_com_lichao_chaoplayer_ChaoPlay_Yuv(JNIEnv *env, jobject instance, jstring u
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_lichao_chaoplayer_MainActivity_TestJNI(JNIEnv *env, jobject instance) {
-
     std::string hello = "Hello from C++";
-
-    TestObs *tobs = new TestObs();
-    ChaoDemux *de = new FFDemux();
-//    de->AddObs(tobs);
-    de->Open("/sdcard/Movies/1080.mp4");
-
-    ChaoDecode *vdecode = new FFDecode();
-    vdecode->Open(de->GetVPara());
-
-    ChaoDecode *adecode = new FFDecode();
-    adecode->Open(de->GetAPara());
-
-    de->AddObs(vdecode);
-    de->AddObs(adecode);
-
-    view = new GLVideoView();
-    vdecode->AddObs(view);
-
-    ChaoResample *resample = new FFResample();
-    ChaoParameter outPara = de->GetAPara();
-
-    resample->Open(de->GetAPara(),outPara);
-    adecode->AddObs(resample);
-
-    ChaoAudioPlay *audioPlay = new SLAudioPlay();
-    audioPlay->StartPlay(outPara);
-    resample->AddObs(audioPlay);
-
-
-    de->Start();
-    vdecode->Start();
-    adecode->Start();
-//    ChaoSleep(3000);
-//    de->Stop();
-
-    /*for (;;) {
-        ChaoData d = de->Read();
-        //CHAOLOGI("Read data size is %d", d.size);
-    }*/
 
     return env->NewStringUTF(hello.c_str());
 }
@@ -750,3 +739,4 @@ Java_com_lichao_chaoplayer_ChaoPlay_InitView(JNIEnv *env, jobject instance, jobj
 //    ChaoShader shader;
 //    shader.Init();
 }
+

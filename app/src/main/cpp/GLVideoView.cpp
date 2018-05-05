@@ -13,7 +13,7 @@ void GLVideoView::Render(ChaoData data) {
     if(!view) return;
     if(!txt) {
         txt = ChaoTexture::Create();
-        txt->Init(view);
+        txt->Init(view, (ChaoTextureType)data.format);
     }
     txt->Draw(data.datas, data.width, data.height);
 }
