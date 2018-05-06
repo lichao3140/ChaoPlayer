@@ -6,25 +6,38 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class MainActivity extends AppCompatActivity implements Runnable {
 
     private static final int MY_PERMISSION_REQUEST_CODE = 10000;
+
+    private Thread thread;
 
     static {
         System.loadLibrary("native-lib");
     }
+
+    @BindView(R.id.open_button)
+    Button openButton;
+    @BindView(R.id.aplayseek)
+    SeekBar aplayseek;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +45,15 @@ public class MainActivity extends AppCompatActivity {
         //去掉标题栏
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         //全屏，隐藏状态
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN , WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //屏幕为横屏
-        setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        TextView tv = (TextView) findViewById(R.id.sample_text);
-        //tv.setText(stringFromJNI());
-
+        aplayseek.setMax(1000);
+        thread = new Thread(this);
+        thread.start();
         /**
          * 需要3个权限(都是危险权限):
          *      1. 读取通讯录权限;
@@ -50,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
          * 第 1 步: 检查是否有相应的权限
          */
         boolean isAllGranted = checkPermissionAllGranted(
-                new String[] {
+                new String[]{
                         Manifest.permission.READ_CONTACTS,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -68,13 +82,22 @@ public class MainActivity extends AppCompatActivity {
         // 一次请求多个权限, 如果其他有权限是已经授予的将会自动忽略掉
         ActivityCompat.requestPermissions(
                 this,
-                new String[] {
+                new String[]{
                         Manifest.permission.READ_CONTACTS,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 },
                 MY_PERMISSION_REQUEST_CODE
         );
+    }
+
+
+
+    @OnClick(R.id.open_button)
+    public void onClick(View view) {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this , OpenActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -146,4 +169,18 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("取消", null);
         builder.show();
     }
+
+    @Override
+    public void run() {
+        for(;;) {
+            aplayseek.setProgress((int)(PlayPos()*1000));
+            try {
+                Thread.sleep(40);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public native double PlayPos();
 }

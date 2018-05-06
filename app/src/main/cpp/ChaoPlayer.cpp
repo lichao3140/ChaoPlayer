@@ -68,6 +68,22 @@ void ChaoPlayer::Close() {
     mux.unlock();
 }
 
+double ChaoPlayer::PlayPos() {
+    double pos = 0.0;
+    mux.lock();
+
+    int total = 0;
+    if(demux)
+        total = demux->totalMs;
+    if(total>0) {
+        if(vdecode) {
+            pos = (double)vdecode->pts/(double)total;
+        }
+    }
+    mux.unlock();
+    return pos;
+}
+
 bool ChaoPlayer::Open(const char *path) {
     Close();
     mux.lock();
@@ -85,8 +101,8 @@ bool ChaoPlayer::Open(const char *path) {
         CHAOLOGE("adecode->Open %s failed!", path);
     }
     //重采样 有可能不需要，解码后或者解封后可能是直接能播放的数据
-    if(outPara.sample_rate <= 0)
-        outPara = demux->GetAPara();
+    //if(outPara.sample_rate <= 0)
+    outPara = demux->GetAPara();
     if(!resample || !resample->Open(demux->GetAPara(), outPara)) {
         CHAOLOGE("resample->Open %s failed!", path);
     }
@@ -113,6 +129,8 @@ bool ChaoPlayer::Start() {
 }
 
 void ChaoPlayer::InitView(void *win) {
-    if(videoView)
+    if(videoView) {
+        videoView->Close();
         videoView->SetRender(win);
+    }
 }

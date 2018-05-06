@@ -7,8 +7,7 @@ extern "C"
 JNIEXPORT
 jint JNI_OnLoad(JavaVM *vm, void *res) {
     ChaoPlayerPorxy::Get()->Init(vm);
-    ChaoPlayerPorxy::Get()->Open("/sdcard/Movies/1080.mp4");
-    ChaoPlayerPorxy::Get()->Start();
+
     return JNI_VERSION_1_4;
 }
 
@@ -19,3 +18,19 @@ Java_com_lichao_chaoplayer_ChaoPlay_InitView(JNIEnv *env, jobject instance, jobj
     ChaoPlayerPorxy::Get()->InitView(win);
 }
 
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_lichao_chaoplayer_OpenActivity_Open(JNIEnv *env, jobject instance, jstring url_) {
+    const char *url = env->GetStringUTFChars(url_, 0);
+    // 打开本地视频
+    ChaoPlayerPorxy::Get()->Open(url);
+    ChaoPlayerPorxy::Get()->Start();
+    env->ReleaseStringUTFChars(url_, url);
+}
+
+extern "C"
+JNIEXPORT jdouble JNICALL
+Java_com_lichao_chaoplayer_MainActivity_PlayPos(JNIEnv *env, jobject instance) {
+    // 播放进度条
+    return ChaoPlayerPorxy::Get()->PlayPos();
+}
