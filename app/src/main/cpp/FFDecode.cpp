@@ -60,6 +60,7 @@ bool FFDecode::Open(ChaoParameter para, bool isHard) {
 }
 
 void FFDecode::Close() {
+    ChaoDecode::Clear();
     mux.lock();
     pts = 0;
     if(frame)

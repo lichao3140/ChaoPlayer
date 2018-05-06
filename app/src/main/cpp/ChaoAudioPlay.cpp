@@ -3,7 +3,15 @@
 //
 
 #include "ChaoAudioPlay.h"
-#include "ChaoLog.h"
+
+void ChaoAudioPlay::Clear() {
+    framesMutex.lock();
+    while(!frames.empty()) {
+        frames.front().Drop();
+        frames.pop_front();
+    }
+    framesMutex.unlock();
+}
 
 ChaoData ChaoAudioPlay::GetData() {
     ChaoData d;

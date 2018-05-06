@@ -18,7 +18,7 @@ public:
     //开始播放
     virtual bool StartPlay(ChaoParameter out) = 0;
     virtual void Close() = 0;
-    //virtual void Clear();
+    virtual void Clear();
     //最大缓冲
     int maxFrame = 100;
 

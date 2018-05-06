@@ -3,7 +3,6 @@
 //
 
 #include "ChaoDecode.h"
-#include "ChaoLog.h"
 
 //由主体notify的数据
 void ChaoDecode::Update(ChaoData pkt) {
@@ -22,6 +21,17 @@ void ChaoDecode::Update(ChaoData pkt) {
         packsMutex.unlock();
         ChaoSleep(1);
     }
+}
+
+void ChaoDecode::Clear() {
+    packsMutex.lock();
+    while(!packs.empty()) {
+        packs.front().Drop();
+        packs.pop_front();
+    }
+    pts = 0;
+    synPts = 0;
+    packsMutex.unlock();
 }
 
 void ChaoDecode::Main() {

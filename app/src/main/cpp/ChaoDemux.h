@@ -15,7 +15,7 @@ public:
     //打开文件，或者流媒体 rmtp http rtsp
     virtual bool Open(const char *url) = 0;
 
-    //virtual void Close();
+    virtual void Close() = 0;
 
     //获取视频参数
     virtual ChaoParameter GetVPara() = 0;

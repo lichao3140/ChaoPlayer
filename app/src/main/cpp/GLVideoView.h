@@ -14,10 +14,11 @@ class GLVideoView: public ChaoVideoView {
 public:
     virtual void SetRender(void *win);
     virtual void Render(ChaoData data);
-
+    virtual void Close();
 protected:
     void *view = 0;
     ChaoTexture *txt = 0;
+    std::mutex mux;
 };
 
 

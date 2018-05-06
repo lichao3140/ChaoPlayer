@@ -5,6 +5,13 @@
 #include "ChaoPlayerPorxy.h"
 #include "FFPlayerBuilder.h"
 
+void ChaoPlayerPorxy::Close() {
+    mux.lock();
+    if(player)
+        player->Close();
+    mux.unlock();
+}
+
 void ChaoPlayerPorxy::Init(void *vm) {
     mux.lock();
     if(vm) {

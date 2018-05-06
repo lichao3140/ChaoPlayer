@@ -14,6 +14,7 @@ public:
     virtual void SetRender(void *win) = 0;
     virtual void Render(ChaoData data) = 0;
     virtual void Update(ChaoData data);
+    virtual void Close() = 0;
 };
 
 

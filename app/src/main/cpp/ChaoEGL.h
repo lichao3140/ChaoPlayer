@@ -10,6 +10,7 @@ class ChaoEGL {
 public:
     // 初始化窗口
     virtual bool Init(void *win) = 0;
+    virtual void Close() = 0;
     virtual void Draw() = 0;
     static ChaoEGL *Get();
 

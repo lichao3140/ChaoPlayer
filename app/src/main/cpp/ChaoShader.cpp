@@ -107,11 +107,34 @@ static GLuint InitShader(const char *code,GLint type) {
     return sh;
 }
 
+void ChaoShader::Close() {
+    mux.lock();
+    //释放shader
+    if(program)
+        glDeleteProgram(program);
+    if(fsh)
+        glDeleteShader(fsh);
+    if(vsh)
+        glDeleteShader(vsh);
+
+    //释放材质
+    for(int i = 0; i < sizeof(texts)/sizeof(unsigned int); i++) {
+        if(texts[i]) {
+            glDeleteTextures(1,&texts[i]);
+        }
+        texts[i] = 0;
+    }
+    mux.unlock();
+}
+
 bool ChaoShader::Init(ChaoShaderType type) {
+    Close();
     //顶点和片元shader初始化
     //顶点shader初始化
+    mux.lock();
     vsh = InitShader(vertexShader,GL_VERTEX_SHADER);
     if(vsh == 0) {
+        mux.unlock();
         CHAOLOGE("InitShader GL_VERTEX_SHADER failed!");
         return false;
     }
@@ -129,11 +152,13 @@ bool ChaoShader::Init(ChaoShaderType type) {
             fsh = InitShader(fragNV21,GL_FRAGMENT_SHADER);
             break;
         default:
+            mux.unlock();
             CHAOLOGE("XSHADER format is error");
             return false;
     }
 
     if(fsh == 0) {
+        mux.unlock();
         CHAOLOGE("InitShader GL_FRAGMENT_SHADER failed!");
         return false;
     }
@@ -144,6 +169,7 @@ bool ChaoShader::Init(ChaoShaderType type) {
     //创建渲染程序
     program = glCreateProgram();
     if(program == 0) {
+        mux.unlock();
         CHAOLOGE("glCreateProgram failed!");
         return false;
     }
@@ -156,6 +182,7 @@ bool ChaoShader::Init(ChaoShaderType type) {
     GLint status = 0;
     glGetProgramiv(program,GL_LINK_STATUS,&status);
     if(status != GL_TRUE) {
+        mux.unlock();
         CHAOLOGE("glLinkProgram failed!");
         return false;
     }
@@ -201,25 +228,28 @@ bool ChaoShader::Init(ChaoShaderType type) {
             glUniform1i(glGetUniformLocation(program, "uvTexture"), 1); //对于纹理第2层
             break;
     }
-
+    mux.unlock();
     CHAOLOGI("初始化Shader成功！");
 
     return true;
 }
 
-
 void ChaoShader::Draw() {
-    if(!program)
+    mux.lock();
+    if(!program) {
+        mux.unlock();
         return;
+    }
     //三维绘制
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
+    mux.unlock();
 }
 
 void ChaoShader::GetTexture(unsigned int index,int width,int height, unsigned char *buf, bool isa) {
-
     unsigned int format =GL_LUMINANCE;
     if(isa)
         format = GL_LUMINANCE_ALPHA;
+    mux.lock();
     if(texts[index] == 0) {
         //材质初始化
         glGenTextures(1,&texts[index]);
@@ -246,4 +276,5 @@ void ChaoShader::GetTexture(unsigned int index,int width,int height, unsigned ch
     glBindTexture(GL_TEXTURE_2D,texts[index]);
     //替换纹理内容
     glTexSubImage2D(GL_TEXTURE_2D,0,0,0,width,height,format,GL_UNSIGNED_BYTE,buf);
+    mux.unlock();
 }
