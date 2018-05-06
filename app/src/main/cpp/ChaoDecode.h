@@ -15,6 +15,8 @@ public:
     //打开解码器  默认不打开硬解码
     virtual bool Open(ChaoParameter para, bool isHard = false) = 0;
 
+    //virtual void Close();
+
     //future模型 发送数据到线程解码
     virtual bool SendPacket(ChaoData pkt) = 0;
 

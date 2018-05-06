@@ -12,9 +12,11 @@ struct SwrContext;
 class FFResample: public ChaoResample {
 public:
     virtual bool Open(ChaoParameter in, ChaoParameter out = ChaoParameter());
+    virtual void Close();
     virtual ChaoData Resample(ChaoData indata);
 protected:
     SwrContext *actx = 0;
+    std::mutex mux;
 };
 
 

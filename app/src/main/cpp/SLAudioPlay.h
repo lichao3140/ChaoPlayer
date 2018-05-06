@@ -11,12 +11,14 @@
 class SLAudioPlay: public ChaoAudioPlay {
 public:
     virtual bool StartPlay(ChaoParameter out);
+    virtual void Close();
     void PlayCall(void *bufq);
 
     SLAudioPlay();
     virtual ~SLAudioPlay();
 protected:
     unsigned char *buf = 0;
+    std::mutex mux;
 };
 
 
