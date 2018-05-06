@@ -70,7 +70,7 @@ void SLAudioPlay::Close() {
     mux.lock();
     //停止播放
     if(iplayer && (*iplayer)) {
-        (*iplayer)->SetPlayState(iplayer,SL_PLAYSTATE_STOPPED);
+        (*iplayer)->SetPlayState(iplayer, SL_PLAYSTATE_STOPPED);
     }
     //清理播放队列
     if(pcmQue && (*pcmQue)) {

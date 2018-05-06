@@ -174,7 +174,6 @@ bool ChaoPlayer::Open(const char *path) {
         CHAOLOGE("adecode->Open %s failed!", path);
     }
     //重采样 有可能不需要，解码后或者解封后可能是直接能播放的数据
-    //if(outPara.sample_rate <= 0)
     outPara = demux->GetAPara();
     if(!resample || !resample->Open(demux->GetAPara(), outPara)) {
         CHAOLOGE("resample->Open %s failed!", path);

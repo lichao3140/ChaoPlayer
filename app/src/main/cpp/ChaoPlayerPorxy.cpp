@@ -70,8 +70,7 @@ bool ChaoPlayerPorxy::Open(const char *path) {
     return re;
 }
 
-bool ChaoPlayerPorxy::Start()
-{
+bool ChaoPlayerPorxy::Start() {
     bool re = false;
     mux.lock();
     if(player)

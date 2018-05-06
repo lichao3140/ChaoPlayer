@@ -18,7 +18,7 @@ public:
     // 初始化窗口
     virtual bool Init(void *win) {
         ANativeWindow *nwin = (ANativeWindow *)win;
-
+        Close();
         //初始化EGL
         mux.lock();
         //1 获取EGLDisplay对象 显示设备
