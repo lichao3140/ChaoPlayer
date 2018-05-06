@@ -33,6 +33,32 @@ double ChaoPlayerPorxy::PlayPos() {
     return pos;
 }
 
+bool ChaoPlayerPorxy::IsPause() {
+    bool re = false;
+    mux.lock();
+    if(player)
+        re = player->IsPause();
+    mux.unlock();
+    return re;
+}
+
+void ChaoPlayerPorxy::SetPause(bool isP) {
+    mux.lock();
+    if(player)
+        player->SetPause(isP);
+    mux.unlock();
+}
+
+bool ChaoPlayerPorxy::Seek(double pos) {
+    bool re = false;
+    mux.lock();
+    if(player) {
+        re = player->Seek(pos);
+    }
+    mux.unlock();
+    return re;
+}
+
 bool ChaoPlayerPorxy::Open(const char *path) {
     bool re = false;
     mux.lock();

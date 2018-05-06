@@ -177,6 +177,7 @@ bool SLAudioPlay::StartPlay(ChaoParameter out) {
 
     //启动队列回调
     (*pcmQue)->Enqueue(pcmQue, "", 1);
+    isExit = false;
     mux.unlock();
     CHAOLOGI("SLAudioPlay::StartPlay success!");
     return true;

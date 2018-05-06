@@ -47,6 +47,9 @@ void ChaoPlayer::Close() {
         vdecode->Stop();
     if(adecode)
         adecode->Stop();
+    if(audioPlay)
+        audioPlay->Stop();
+
     //2 清理缓冲队列
     if(vdecode)
         vdecode->Clear();
@@ -54,6 +57,7 @@ void ChaoPlayer::Close() {
         adecode->Clear();
     if(audioPlay)
         audioPlay->Clear();
+
     //3 清理资源
     if(audioPlay)
         audioPlay->Close();
@@ -82,6 +86,75 @@ double ChaoPlayer::PlayPos() {
     }
     mux.unlock();
     return pos;
+}
+
+void ChaoPlayer::SetPause(bool isP) {
+    mux.lock();
+    ChaoThread::SetPause(isP);
+    if(demux)
+        demux->SetPause(isP);
+    if(vdecode)
+        vdecode->SetPause(isP);
+    if(adecode)
+        adecode->SetPause(isP);
+    if(audioPlay)
+        audioPlay->SetPause(isP);
+    mux.unlock();
+}
+
+bool ChaoPlayer::Seek(double pos) {
+    bool re = false;
+    if(!demux) return false;
+
+    //暂停所有线程
+    SetPause(true);
+    mux.lock();
+    //清理缓冲
+    //2 清理缓冲队列
+    if(vdecode)
+        vdecode->Clear(); //清理缓冲队列，清理ffmpeg的缓冲
+    if(adecode)
+        adecode->Clear();
+    if(audioPlay)
+        audioPlay->Clear();
+
+    re = demux->Seek(pos); //seek跳转到关键帧
+    if(!vdecode) {
+        mux.unlock();
+        SetPause(false);
+        return re;
+    }
+    //解码到实际需要显示的帧
+    int seekPts = pos*demux->totalMs;
+    while(!isExit) {
+        ChaoData pkt = demux->Read();
+        if(pkt.size<=0)break;
+        if(pkt.isAudio) {
+            if(pkt.pts < seekPts) {
+                pkt.Drop();
+                continue;
+            }
+            //写入缓冲队列
+            demux->Notify(pkt);
+            continue;
+        }
+
+        //解码需要显示的帧之前的数据
+        vdecode->SendPacket(pkt);
+        pkt.Drop();
+        ChaoData data = vdecode->RecvFrame();
+        if(data.size <=0) {
+            continue;
+        }
+        if(data.pts >= seekPts) {
+            //vdecode->Notify(data);
+            break;
+        }
+    }
+    mux.unlock();
+
+    SetPause(false);
+    return re;
 }
 
 bool ChaoPlayer::Open(const char *path) {

@@ -59,6 +59,14 @@ bool FFDecode::Open(ChaoParameter para, bool isHard) {
     return true;
 }
 
+void FFDecode::Clear() {
+    ChaoDecode::Clear();
+    mux.lock();
+    if(codec)
+        avcodec_flush_buffers(codec);
+    mux.unlock();
+}
+
 void FFDecode::Close() {
     ChaoDecode::Clear();
     mux.lock();

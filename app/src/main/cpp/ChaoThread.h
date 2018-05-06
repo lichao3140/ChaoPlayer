@@ -17,12 +17,22 @@ public:
     //通过控制isExit安全停止线程（不一定成功）
     virtual void Stop();
 
+    // 暂停
+    virtual void SetPause(bool isP);
+
+    virtual bool IsPause() {
+        isPausing = isPause;
+        return isPause;
+    }
+
     //入口主函数
     virtual void Main() {}
 
 protected:
     bool isExit = false;
     bool isRuning = false;
+    bool isPause = false;
+    bool isPausing = false;//当前状态是否在暂停当中
 private:
     void ThreadMain();
 };

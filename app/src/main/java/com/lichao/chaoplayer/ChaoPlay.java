@@ -4,16 +4,19 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
+import android.view.View;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class ChaoPlay extends GLSurfaceView implements Runnable, SurfaceHolder.Callback, GLSurfaceView.Renderer {
+public class ChaoPlay extends GLSurfaceView implements Runnable, SurfaceHolder.Callback, GLSurfaceView.Renderer, View.OnClickListener {
 
     public ChaoPlay(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         //android 8.0 需要设置
         setRenderer(this);
+        setOnClickListener(this);
     }
 
     @Override
@@ -55,6 +58,12 @@ public class ChaoPlay extends GLSurfaceView implements Runnable, SurfaceHolder.C
 
     }
 
+    @Override
+    public void onClick(View v) {
+        PlayOrPause();
+    }
+
     public native void InitView(Object surface);
+    public native void PlayOrPause();
 
 }

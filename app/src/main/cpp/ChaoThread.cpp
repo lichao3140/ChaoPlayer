@@ -13,9 +13,21 @@ void ChaoSleep(int mis) {
     this_thread::sleep_for(du);
 }
 
+void ChaoThread::SetPause(bool isP) {
+    isPause = isP;
+    //等待100毫秒
+    for(int i = 0; i < 10; i++) {
+        if(isPausing == isP) {
+            break;
+        }
+        ChaoSleep(10);
+    }
+}
+
 //启动线程
 bool ChaoThread::Start() {
     isExit = false;
+    isPause = false;
     thread th(&ChaoThread::ThreadMain, this);
     th.detach();
     return true;

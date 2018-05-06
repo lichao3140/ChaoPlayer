@@ -15,8 +15,14 @@ void ChaoAudioPlay::Clear() {
 
 ChaoData ChaoAudioPlay::GetData() {
     ChaoData d;
-
+    isRuning = true;
     while(!isExit) {
+        // 暂停状态
+        if(IsPause()) {
+            ChaoSleep(2);
+            continue;
+        }
+
         framesMutex.lock();
         if(!frames.empty()) {
             //有数据返回
@@ -29,6 +35,7 @@ ChaoData ChaoAudioPlay::GetData() {
         framesMutex.unlock();
         ChaoSleep(1);
     }
+    isRuning = false;
     //未获取数据
     return d;
 }

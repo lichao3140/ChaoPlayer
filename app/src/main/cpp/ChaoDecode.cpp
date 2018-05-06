@@ -36,6 +36,12 @@ void ChaoDecode::Clear() {
 
 void ChaoDecode::Main() {
     while(!isExit) {
+        //暂停状态
+        if(IsPause()) {
+            ChaoSleep(2);
+            continue;
+        }
+
         packsMutex.lock();
         //判断音视频同步
         if(!isAudio && synPts > 0) {

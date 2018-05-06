@@ -7,9 +7,15 @@
 
 void ChaoDemux::Main() {
     while (!isExit) {
+        if(IsPause()) {
+            ChaoSleep(2);
+            continue;
+        }
         ChaoData d = Read();
         if (d.size > 0)
             Notify(d);
+        else
+            ChaoSleep(2);
 //        CHAOLOGI("ChaoDemux Read %d", d.size);
 //        if (d.size <= 0) break;
     }

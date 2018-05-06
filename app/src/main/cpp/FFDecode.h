@@ -21,6 +21,9 @@ public:
     //关闭资源
     virtual void Close();
 
+    //清理
+    virtual void Clear();
+
     //future模型 发送数据到线程解码
     virtual bool SendPacket(ChaoData pkt);
 

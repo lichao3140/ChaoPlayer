@@ -24,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements Runnable {
+public class MainActivity extends AppCompatActivity implements Runnable, SeekBar.OnSeekBarChangeListener {
 
     private static final int MY_PERMISSION_REQUEST_CODE = 10000;
 
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         ButterKnife.bind(this);
 
         aplayseek.setMax(1000);
+        aplayseek.setOnSeekBarChangeListener(this);
         thread = new Thread(this);
         thread.start();
         /**
@@ -182,5 +183,21 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
     }
 
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        Seek((double)seekBar.getProgress() / (double)seekBar.getMax());
+    }
+
     public native double PlayPos();
+    public native void Seek(double pos);
 }
