@@ -1,40 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <com.lichao.chaoplayer.ChaoPlay
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <include
+        android:id="@+id/title"
+        layout="@layout/include_common_text_title"/>
 
-    <FrameLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_below="@+id/title"
+        android:layout_above="@+id/v_line"/>
 
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_ededed"
+        android:layout_above="@+id/tb_nav"/>
 
-            <Button
-                android:id="@+id/open_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Open" />
-            <SeekBar
-                android:id="@+id/aplayseek"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+    <com.lichao.chaoplayer.ui.widget.TabLayoutView
+        android:id="@+id/tb_nav"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/color_white"
+        android:layout_alignParentBottom="true"/>
 
-    </FrameLayout>
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
