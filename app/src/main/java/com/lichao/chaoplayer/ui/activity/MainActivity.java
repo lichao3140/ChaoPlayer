@@ -102,9 +102,9 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         if(currentIndex == 2) {
             if(localFragment != null) {
-//                if(localFragment.backDir() != 0) {
-//                    finish();
-//                }
+                if(localFragment.backDir() != 0) {
+                    finish();
+                }
             }
         } else {
             finish();
