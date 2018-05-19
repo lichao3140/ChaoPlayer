@@ -13,7 +13,7 @@ jint JNI_OnLoad(JavaVM *vm, void *res) {
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_lichao_chaoplayer_util_MyNative_InitView(JNIEnv *env, jobject instance, jobject surface) {
+Java_com_lichao_chaoplayer_lcpplayer_player_LCPlayer_InitView(JNIEnv *env, jobject instance, jobject surface) {
     //初始化窗口
     ANativeWindow *win = ANativeWindow_fromSurface(env, surface);
     ChaoPlayerPorxy::Get()->InitView(win);
@@ -21,7 +21,7 @@ Java_com_lichao_chaoplayer_util_MyNative_InitView(JNIEnv *env, jobject instance,
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_lichao_chaoplayer_util_MyNative_Open(JNIEnv *env, jobject instance, jstring url_) {
+Java_com_lichao_chaoplayer_lcpplayer_player_LCPlayer_Open(JNIEnv *env, jobject instance, jstring url_) {
     const char *url = env->GetStringUTFChars(url_, 0);
     // 打本地视频或网络视频
     ChaoPlayerPorxy::Get()->Open(url);
@@ -32,22 +32,29 @@ Java_com_lichao_chaoplayer_util_MyNative_Open(JNIEnv *env, jobject instance, jst
 
 extern "C"
 JNIEXPORT jdouble JNICALL
-Java_com_lichao_chaoplayer_util_MyNative_PlayPos(JNIEnv *env, jobject instance) {
+Java_com_lichao_chaoplayer_lcpplayer_player_LCPlayer_PlayPos(JNIEnv *env, jobject instance) {
     // 播放进度条
     return ChaoPlayerPorxy::Get()->PlayPos();
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_lichao_chaoplayer_util_MyNative_Seek(JNIEnv *env, jobject instance, jdouble pos) {
+Java_com_lichao_chaoplayer_lcpplayer_player_LCPlayer_Seek(JNIEnv *env, jobject instance, jdouble pos) {
     // 进度条Seek
     ChaoPlayerPorxy::Get()->Seek(pos);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_lichao_chaoplayer_util_MyNative_PlayOrPause(JNIEnv *env, jobject instance) {
+Java_com_lichao_chaoplayer_lcpplayer_player_LCPlayer_PlayOrPause(JNIEnv *env, jobject instance) {
     // 暂停
     ChaoPlayerPorxy::Get()->SetPause(!ChaoPlayerPorxy::Get()->IsPause());
 }
 
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_lichao_chaoplayer_lcpplayer_player_LCPlayer_Pause(JNIEnv *env, jobject instance) {
+
+    // 停止
+    ChaoPlayer::Get()->Close();
+}

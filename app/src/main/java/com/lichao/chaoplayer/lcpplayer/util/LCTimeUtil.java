@@ -1,11 +1,11 @@
-package com.lichao.chaoplayer.util;
+package com.lichao.chaoplayer.lcpplayer.util;
 
 /**
  * Created by ChaoLi on 2018/5/19 0019 - 12:56
  * Email: lichao3140@gmail.com
  * Version: v1.0
  */
-public class TimeUtil {
+public class LCTimeUtil {
 
     public static String secdsToDateFormat(int sends) {
         if(sends <= 0) {

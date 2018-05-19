@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="https://github.com/wanliyang1990/"
+            android:text="https://github.com/lichao3140/"
             android:textColor="@color/color_333333"
             android:textSize="14dp"
             android:layout_marginRight="10dp"
@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="http://blog.csdn.net/ywl5320"
+            android:text="http://blog.csdn.net/lichao3140"
             android:textColor="@color/color_333333"
             android:textSize="14dp"
             android:layout_marginRight="10dp"
@@ -75,7 +75,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ywl5320"
+            android:text="lichao3140"
             android:textColor="@color/color_333333"
             android:textSize="14dp"
             android:layout_marginRight="10dp"

@@ -34,10 +34,6 @@ public class MainActivity extends BaseActivity {
     private int[] imgs = {R.drawable.nav_video_selector, R.drawable.nav_audio_selector,
                           R.drawable.nav_file_selector, R.drawable.nav_about_selector};
 
-    static {
-        System.loadLibrary("native-lib");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

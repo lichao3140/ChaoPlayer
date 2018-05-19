@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.lichao.chaoplayer.util.MyNative;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -35,11 +33,11 @@ public class OpenActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.playvideo:
-                MyNative.Open(fileurl.getText().toString());
+                //MyNative.Open(fileurl.getText().toString());
                 finish();
                 break;
             case R.id.playrtmp:
-                MyNative.Open(rtmpurl.getText().toString());
+                //MyNative.Open(rtmpurl.getText().toString());
                 finish();
                 break;
             default:
